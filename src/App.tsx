@@ -2,79 +2,66 @@ import './App.css'
 import Header from './components/Header'
 import Main from './components/Main'
 import Footer from './components/Footer'
-import { useEffect, useState} from 'react'
+import { useEffect, useState, useRef} from 'react'
 import { fetchNews } from './newsSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from './store/store'
 import { createSelector } from '@reduxjs/toolkit'
 import { useFetchNewsQuery } from './store/api'
-import {FixedSizeList as List} from 'react-window'
-import New from './components/New'
+import NewsList from './components/NewsList'
 
-const selectedFields = createSelector((state: RootState) => state.news, (news) => news.map((item: any) => {
-  return {
-    abstract: item.abstract,
-    web_url: item.web_url,
-    multimedia: item.multimedia,
-    pub_date:item.pub_date,
-    source: item.source
+const makeNewsBlocks = (news) => {
+
+  if(!news) {
+    console.log('There is no news');
+    return;
   }
-}));
+  const result = {};
+
+  for (let item of news) {
+    const currentDate = item.pub_date.split('T')[0];
+    if (!result[currentDate]) {
+      result[currentDate] = [item];
+    } else {
+      result[currentDate].push(item);
+    }
+  }
+  return result;
+}
 
 function App() {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const news = useSelector(selectedFields);
 
-  // useEffect(() => {
-  //   dispatch(fetchNews());
-  // }, [dispatch]);
+  const [year, setYear] = useState(2019);
+  const [month, setMonth] = useState(1);
+  const [height, setHeight] = useState(window.innerHeight);
 
   const [visibleData, setVisibleData] = useState<any[]>([]);
-  const {data: news, error, isLoading} = useFetchNewsQuery();
+  const {data: news, error, isLoading, isError, isFetching, refetch} = useFetchNewsQuery({
+    year: year,
+    month: month,
+  });
 
-  useEffect(() => {
-    if (news) {
-      setVisibleData(news);
-    }
-  }, [news]);
+  const timedNews = makeNewsBlocks(news);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     refetch();
+  //   }, 30000);
+  //   return () => clearInterval(intervalId);
+  // }, [refetch, year, month]);
 
   if (isLoading) return <div>Loading...</div>;
 
-  if (error) return <div>Error loding news</div>
-
-  const renderNews = ({index, style}: {index: number, style: React.CSSProperties}) => {
-    const item = visibleData[index];
-    return (
-      <div style={style} key={index}>
-        <h3>{item.abstract}</h3>
-        <p>{item.web_url}</p>
-        <p>{item.pub_date}</p>
-      </div>
-    )
-  }
+  if (isError) return <div>Error loading news</div>
 
   return (
     <>
-      <div>
+      <div className='w-90 mx-auto'>
         <Header />
-        <List 
-          height={600}
-          itemCount={visibleData.length}
-          itemSize={100}
-          width={360}
-          itemData={news}
-          >
-          {New}
-        </List>
-        {/* <Main blocks={blocks}/> */}
-        {/* {news && news.map((item: any, index: any) => (
-          <li key={index}>
-            <h2>{item.abstract}</h2>
-            <p>{item.web_url}</p>
-            <p>{item.pub_date}</p>
-            <p>{item.source}</p>
-            </li>
-        ))} */}
+        <Main>
+          {isFetching ? <p>Updating news...</p> : null}
+        <NewsList blocks={timedNews ? timedNews: []}/>
+        </Main>
         <Footer />
       </div>
     </>

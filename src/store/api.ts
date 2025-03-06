@@ -5,7 +5,7 @@ export const newsApi = createApi({
     baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:3000'}),
     endpoints: (builder) => ({
         fetchNews: builder.query({
-            query: () => '/news',
+            query: ({year, month}) => `/news?year=${year}&month=${month}`,
         }),
     }),
 });

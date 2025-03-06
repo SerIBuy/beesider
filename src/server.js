@@ -12,12 +12,26 @@ app.use(
   })
 );
 
+app.get("/", (_, res) => {
+  res.send("Welcome to server!");
+});
+
 app.get("/news", async (req, res) => {
-  const response = await fetch(
-    "https://api.nytimes.com/svc/archive/v1/2015/1.json?api-key=vEJwp3nmtqMIO6FDqQwyQdjbTzJcbdAh"
-  );
-  const data = await response.json();
-  res.json(data.response.docs);
+  const { year = 2019, month = 12 } = req.query;
+  try {
+    const response = await fetch(
+      `https://api.nytimes.com/svc/archive/v1/${year}/${month}.json?api-key=vEJwp3nmtqMIO6FDqQwyQdjbTzJcbdAh`
+    );
+
+    if (!response.ok) {
+      throw new Error("Data fetching error");
+    }
+
+    const data = await response.json();
+    res.json(data.response.docs);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3000, () => {
