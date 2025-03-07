@@ -7,7 +7,7 @@ const NewsList = ({blocks}) => {
   return (
     <>
     {dates.map((item, index) => (
-        <BlockNews key={index} date={item} newsList={blocks[item]}/>
+        <BlockNews key={index} date={item} newsList={blocks[item]} isLoading={isLoading}/>
     ))}
     </>
   );
