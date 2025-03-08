@@ -1,40 +1,56 @@
 import New from "./New";
-import { useRef, useCallback, useState} from "react";
+import { useRef, useCallback, useState, useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { addDate } from "../newsSlice";
+import { useSelector } from "react-redux";
 
-const BlockNews = ({date, newsList, isFetching, data, newsByDate}) => {
-  const observer = useRef();
-  const dataCount = useRef(0);
+const BlockNews = ({date, newsList, isFetching, data}) => {
+  const observer = useRef(0);
   const dispatch = useDispatch();
+  let blockDate;
 
-  const [lastDate, setLastDate] = useState(null);
+  if (date) {
+    blockDate = date.split('-').reverse().join('.');
+  }
 
-  const blockDate = date.split('-').reverse().join('.');
+  const loadedDates = useSelector(state => state.news.visibleDates[0]);
 
+  const loadedDatesRef = useRef(loadedDates);
+
+  useEffect(() => {
+    loadedDatesRef.current = loadedDates;
+  }, [loadedDates]);
 
   const lastDateRef = useCallback((node) => {
     if (isFetching || !data) return;
-    if (observer.current) observer.current.disconnect();
+    if (observer.current) {
+      console.log('Delete observer');
+      observer.current.disconnect();
+      ;
+    }
 
     observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             // Добавляем следующую дату
             console.log('Time to refetch')
+            const currentLoadedDate = loadedDatesRef.current;
+            console.log(currentLoadedDate)
             const dates = Object.keys(data || {});
-            dataCount.current++;
-            const nextDate = dates[dataCount.current]; // Берем следующую дату
+            const currentIndex = dates.indexOf(currentLoadedDate);
+            const nextDate = dates[currentIndex + 1]; // Берем следующую дату
 
             console.log(nextDate);
             
-            if (nextDate && nextDate !== lastDate) {
+            if (nextDate) {
                 dispatch(addDate(nextDate));
+                window.scrollTo(0, 0);
             }
+            observer.current.disconnect();
         }
     });
     if (node) observer.current.observe(node);
 
-}, [isFetching, newsByDate, dispatch, lastDate]);
+}, [isFetching, dispatch]);
 
   return (
     <section>

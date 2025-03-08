@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from './store/store'
 import { createSelector } from '@reduxjs/toolkit'
 import { useFetchMonthlyNewsQuery } from './store/api'
-import NewsList from './components/NewsList'
 import { selectVisibleNews } from './selectors/newsSelectors'
 import BlockNews from './components/BlockNews'
 
@@ -21,13 +20,8 @@ function App() {
 
   const {data, isLoading, isError, isFetching, refetch} = useFetchMonthlyNewsQuery({year, month});
 
-  console.log("fetched data: ", data);
-
-  const apiState = useSelector(state => state.newsApi);
-
-  console.log(apiState)
-
 const newsByDate = useSelector(selectVisibleNews);
+const currentDate = useSelector(state => state.news.visibleDates[0]);
 
 console.log('Visible news:', newsByDate);
 
@@ -57,17 +51,13 @@ useEffect(() => {
       <div className='w-90 mx-auto'>
         <Header />
         <Main>
-        {Object.entries(newsByDate).map(([date, news]) => (
-
-                <BlockNews 
-                  key={date} 
-                  date={date} 
-                  newsList={news} 
+          {newsByDate ? <BlockNews 
+                  date={currentDate} 
+                  newsList={newsByDate} 
                   isFetching={isFetching} 
                   data={data} 
-                  newsByDate={newsByDate}
-                  />
-            ))}
+                  /> : null}
+                
             {isFetching && <p>Загрузка...</p>}
         </Main>
         <Footer />
