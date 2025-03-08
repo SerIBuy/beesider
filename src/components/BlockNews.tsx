@@ -31,7 +31,6 @@ const BlockNews = ({date, newsList, isFetching, data}) => {
 
     observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            // Добавляем следующую дату
             console.log('Time to refetch')
             const currentLoadedDate = loadedDatesRef.current;
             console.log(currentLoadedDate)

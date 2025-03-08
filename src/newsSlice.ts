@@ -1,18 +1,21 @@
 import { createSlice} from "@reduxjs/toolkit";
 
+interface IArticle {
+    abstract: string
+}
+
+const initialState: IArticle[] = [];
+
+
 const newsSlice = createSlice({
     name: "news",
-    initialState: {
-        visibleDates: [],
-    },
+    initialState,
     reducers: {
-        addDate: (state, action) => {
-            if (!state.visibleDates.includes(action.payload)) {
-                state.visibleDates.push(action.payload);
-            }
+        setNews(_, action) {
+            return action.payload
         }
     }
 });
 
-export const { addDate } = newsSlice.actions;
+export const { setNews } = newsSlice.actions;
 export default newsSlice.reducer;

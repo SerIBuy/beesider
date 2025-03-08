@@ -16,25 +16,23 @@ enum Months {
 
 const baseUrl = 'https://nytimes.com/';
 
-const New = ({ref, element}) => {
+const New = ({element}) => {
 
   const inputDate = new Date(element.pub_date);
-  let hours = inputDate.getUTCHours();
+  let hours = inputDate.getHours();
   const amPm = hours >= 12 ? "PM" : "AM";
-  hours = hours > 12 ? hours - 12 : hours;
-  const outputDate = `${Months[inputDate.getUTCMonth()]} ${inputDate.getUTCDate()}, ${inputDate.getFullYear()}, ${hours}.${inputDate.getUTCMinutes()} ${amPm}`;
+  hours = hours % 12 || 12;
+  const outputDate = `${Months[inputDate.getMonth()]} ${inputDate.getDate()}, ${inputDate.getFullYear()}, ${hours}.${inputDate.getMinutes()} ${amPm}`;
 
   const image = element.multimedia.find(el => el.subtype === 'thumbnail');
   const imageUrl = baseUrl + image?.url;
 
   return (
-    <a ref={ref} href={element.web_url}>
-      <li className="grid grid-cols-2">
+    <li className="grid grid-cols-2">
       <img src={imageUrl} width={image?.width} height={image?.height}/>
-      <p>{element.abstract}</p>
+      <a href={element.web_url}>{element.abstract}</a>
       <p className="newDate">{outputDate}</p>
     </li>
-    </a>
   )
 };
 
