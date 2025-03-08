@@ -4,3 +4,6 @@
 .newDate {
     grid-area: 2 / 2 / 3 / 3;
 }
+.blockDate {
+    font-weight: 700;
+}

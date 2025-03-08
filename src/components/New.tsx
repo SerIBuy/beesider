@@ -16,7 +16,7 @@ enum Months {
 
 const baseUrl = 'https://nytimes.com/';
 
-const New = ({element}) => {
+const New = ({ref, element}) => {
 
   const inputDate = new Date(element.pub_date);
   let hours = inputDate.getHours();
@@ -28,11 +28,13 @@ const New = ({element}) => {
   const imageUrl = baseUrl + image?.url;
 
   return (
-    <li className="grid grid-cols-2">
+    <a href={element.web_url}>
+      <li ref={ref} className="grid grid-cols-2">
       <img src={imageUrl} width={image?.width} height={image?.height}/>
-      <a href={element.web_url}>{element.abstract}</a>
+      <p>{element.abstract}</p>
       <p className="newDate">{outputDate}</p>
     </li>
+    </a>
   )
 };
 
