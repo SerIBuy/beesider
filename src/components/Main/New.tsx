@@ -28,13 +28,13 @@ const New = ({ref, element}) => {
   const imageUrl = baseUrl + image?.url;
 
   return (
-    <a href={element.web_url}>
-      <li ref={ref} className="grid grid-cols-2">
-      <img src={imageUrl} width={image?.width} height={image?.height}/>
-      <p>{element.abstract}</p>
-      <p className="newDate">{outputDate}</p>
+      <li ref={ref} className="new__container">
+        <a href={element.web_url} className="new">
+          <img src={imageUrl} width={image?.width} height={image?.height}/>
+          <p className="new__abstract">{element.abstract}</p>
+          <p className="new__date">{outputDate}</p>
+        </a>
     </li>
-    </a>
   )
 };
 

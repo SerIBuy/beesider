@@ -1,9 +1,138 @@
-@import "tailwindcss";
-@import "tailwindcss/preflight";
-
-.newDate {
-    grid-area: 2 / 2 / 3 / 3;
+body {
+    margin: 0;
+    padding: 0;
+    font-family:
+        Lato,
+        Arial sans-serif;
 }
-.blockDate {
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    padding: 0;
+    margin: 0;
+}
+
+.app__container {
+    width: 360px;
+    margin: 0 auto;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding-block: 30px;
+    padding-left: 30px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.header__menu {
+    margin-right: 80px;
+}
+
+.header__title {
     font-weight: 700;
+    font-size: 24px;
+}
+
+.new {
+    display: grid;
+    grid-template-columns: auto;
+    column-gap: 20px;
+    text-decoration: none;
+    color: #000000;
+}
+
+.new__container:not(:last-child) {
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.new__abstract {
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.new__date {
+    grid-area: 2 / 2 / 3 / 3;
+    color: #6d787a;
+    margin-bottom: 20px;
+}
+
+.block-news__container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.block-news__date {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    row-gap: 20px;
+}
+
+.footer-menu {
+    display: flex;
+    gap: 20px;
+}
+
+.footer__logo_text {
+    margin-bottom: 15px;
+}
+
+.dot-container {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-block: 20px;
+}
+
+.dot-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #09f;
+    border-radius: 50%;
+    animation: growShrink 1.2s infinite ease-in-out;
+}
+
+/* Анимация изменения размера */
+@keyframes growShrink {
+    0%,
+    100% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
 }
