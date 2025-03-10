@@ -21,32 +21,31 @@ app.get("/news", async (req, res) => {
   const year = parseInt(req.query.year);
   const month = parseInt(req.query.month);
 
-  setTimeout(() => {
-    if (year === 2019 && month === 1) {
-      res.json(mockedNewsJen);
-    } else if (year === 2019 && month === 2) {
-      res.json(mockedNewsFeb);
-    } else {
-      return res.status(404).json({ error: "No data" });
-    }
-  }, 2000);
-
-  // try {
-  //   const response = await fetch(
-  //     `https://api.nytimes.com/svc/archive/v1/${year}/${month}.json?api-key=vEJwp3nmtqMIO6FDqQwyQdjbTzJcbdAh`
-  //   );
-
-  //   if (!response.ok) {
-  //     throw new Error("Data fetching error");
+  // для моковых данных
+  // setTimeout(() => {
+  //   if (year === 2019 && month === 1) {
+  //     res.json(mockedNewsJen);
+  //   } else if (year === 2019 && month === 2) {
+  //     res.json(mockedNewsFeb);
+  //   } else {
+  //     return res.status(404).json({ error: "No data" });
   //   }
+  // }, 2000);
 
-  //   const data = await response.json();
-  //   res.json(data.response.docs);
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  try {
+    const response = await fetch(
+      `https://api.nytimes.com/svc/archive/v1/${year}/${month}.json?api-key=vEJwp3nmtqMIO6FDqQwyQdjbTzJcbdAh`
+    );
 
-  // мокаем запрос
+    if (!response.ok) {
+      throw new Error("Data fetching error");
+    }
+
+    const data = await response.json();
+    res.json(data.response.docs);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3000, () => {

@@ -1,17 +1,18 @@
 import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from "../store/store";
+import { ITransformedNew } from "../types/news";
+import { INew } from "../types/news";
 
-const selectMonthlyNews = (state) => {
+const selectMonthlyNews = (state: RootState) => {
   return  state.newsApi.queries.fetchMonthlyNews?.data || {};
 }
 
 export const selectVisibleNews = createSelector(
-  [selectMonthlyNews, (state) => {
+  [selectMonthlyNews, (state: RootState) => {
     return state.news.visibleDates;
   }],
-  (monthlyNews, visibleDates) => {
-    console.log(monthlyNews);
-    console.log(visibleDates)
-    return visibleDates.reduce((acc, date) => {
+  (monthlyNews: {[key: string]: INew[]}, visibleDates) => {
+    return visibleDates.reduce((acc: ITransformedNew, date: string) => {
       if (monthlyNews[date]) {
         acc[date] = monthlyNews[date];
       }

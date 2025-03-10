@@ -2,15 +2,15 @@ import './App.css'
 import Header from './components/Header/Header'
 import Main from './components/Main/Main'
 import Footer from './components/Footer/Footer'
-import { useEffect, useState, useRef} from 'react'
+import { useEffect, useState} from 'react'
 import { addDate } from './newsSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from './store/store'
+import { INew } from './types/news'
 import { createSelector } from '@reduxjs/toolkit'
 import { useFetchMonthlyNewsQuery } from './store/api'
 import { selectVisibleNews } from './selectors/newsSelectors'
 import BlockNews from './components/Main/BlockNews'
-import { DotLoader } from 'react-spinners'
 import Spinner from './components/ui-kit/Spinner'
 
 
@@ -54,7 +54,7 @@ function handleNextMonthFetch() {
       <div className='app__container'>
         <Header />
         <Main>
-          {Object.entries(newsByDate).map(([date, news], index) => (
+          {Object.entries(newsByDate as {[date: string]: INew[]}).map(([date, news], index) => (
                   <BlockNews 
                   key={index}
                   date={date} 

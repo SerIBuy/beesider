@@ -1,11 +1,20 @@
 import New from "./New";
-import { useRef, useCallback, useState, useEffect} from "react";
+import { useRef, useCallback,useEffect, ReactNode} from "react";
 import { useDispatch } from "react-redux";
 import { addDate } from "../../newsSlice";
 import { useSelector } from "react-redux";
+import { INew } from "../../types/news";
+import { RootState } from "../../store/store";
 
-const BlockNews = ({date, newsList, isFetching, data, onNextFetch}) => {
-  const observer = useRef(0);
+const BlockNews = ({date, newsList, isFetching, data, onNextFetch}:{
+  date: string,
+  newsList: INew[],
+  isFetching: boolean,
+  data: any,
+  onNextFetch: () => void
+}) => {
+
+  const observer = useRef<IntersectionObserver | null>(null);
   const dispatch = useDispatch();
   let blockDate;
 
@@ -13,7 +22,7 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}) => {
     blockDate = date.split('-').reverse().join('.');
   }
 
-  const loadedDates = useSelector(state => state.news.visibleDates);
+  const loadedDates = useSelector((state: RootState) => state.news.visibleDates);
 
   const loadedDatesRef = useRef(loadedDates);
 
@@ -21,7 +30,7 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}) => {
     loadedDatesRef.current = loadedDates;
   }, [loadedDates]);
 
-  const lastDateRef = useCallback((node) => {
+  const lastDateRef = useCallback((node: ReactNode) => {
     if (isFetching || !data) return;
     if (observer.current) {
       observer.current.disconnect();
@@ -40,7 +49,7 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}) => {
             } 
         }
     });
-    if (node) observer.current.observe(node);
+    if (node instanceof Element) observer.current.observe(node);
 
 }, [isFetching, dispatch]);
 

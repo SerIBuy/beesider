@@ -1,3 +1,5 @@
+import { INew } from "../../types/news";
+import { ReactNode } from "react";
 
 enum Months {
   Jen,
@@ -16,7 +18,10 @@ enum Months {
 
 const baseUrl = 'https://nytimes.com/';
 
-const New = ({ref, element}) => {
+const New = ({ref, element}:{
+  ref?: React.Ref<HTMLLIElement> | undefined, 
+  element: INew
+}) => {
 
   const inputDate = new Date(element.pub_date);
   let hours = inputDate.getHours();
