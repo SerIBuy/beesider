@@ -35,7 +35,8 @@ const New = ({ref, element}:{
   return (
       <li ref={ref} className="new__container">
         <a href={element.web_url} className="new">
-          <img src={imageUrl} width={image?.width} height={image?.height}/>
+          <img className="new__image" src={imageUrl} width={99} height={74}/>
+          <h2 className="new__title">{element.source}</h2>
           <p className="new__abstract">{element.abstract}</p>
           <p className="new__date">{outputDate}</p>
         </a>

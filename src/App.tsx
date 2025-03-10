@@ -12,12 +12,14 @@ import { useFetchMonthlyNewsQuery } from './store/api'
 import { selectVisibleNews } from './selectors/newsSelectors'
 import BlockNews from './components/Main/BlockNews'
 import Spinner from './components/ui-kit/Spinner'
+import HeaderMenu from './components/Header/HeaderMenu'
 
 
 function App() {
 
   const [year, setYear] = useState(2019);
   const [month, setMonth] = useState(1);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const dispatch = useDispatch();
   const {data, error, isLoading, isError, isFetching, refetch} = useFetchMonthlyNewsQuery({
     year,
@@ -49,10 +51,15 @@ function handleNextMonthFetch() {
     return () => clearInterval(intervalId);
   }, [refetch, year, month]);
 
+  function handleBurgerClick() {
+    setIsOpenMenu(prev => !prev);
+  }
+
   return (
     <>
       <div className='app__container'>
-        <Header />
+        <Header onBurgerClick={handleBurgerClick}/>
+        {isOpenMenu ? <HeaderMenu onBurgerClick={handleBurgerClick}/> : null}
         <Main>
           {Object.entries(newsByDate as {[date: string]: INew[]}).map(([date, news], index) => (
                   <BlockNews 

@@ -1,8 +1,10 @@
-import Menu from '../../assets/menu-burger.svg?react';
-const Header = () => {
+import MenuOpen from '../../assets/menu-burger-open.svg?react';
+const Header = ({onBurgerClick}: {onBurgerClick: () => void}) => {
   return (
     <header className='header'>
-      <Menu className='header__menu'/>
+      <button onClick={onBurgerClick} className='header__menu-button header__menu-button--open'>
+        <MenuOpen />
+      </button>
       <p className='header__title'>BESIDER</p>
     </header>
   );
