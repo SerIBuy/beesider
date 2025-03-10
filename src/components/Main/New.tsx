@@ -1,5 +1,5 @@
 import { INew } from "../../types/news";
-import { ReactNode } from "react";
+import { forwardRef } from "react";
 
 enum Months {
   Jen,
@@ -18,11 +18,7 @@ enum Months {
 
 const baseUrl = 'https://nytimes.com/';
 
-const New = ({ref, element}:{
-  ref?: React.Ref<HTMLLIElement> | undefined, 
-  element: INew
-}) => {
-
+const New = forwardRef<HTMLLIElement, { element: INew }>(({ element }, ref) => {
   const inputDate = new Date(element.pub_date);
   let hours = inputDate.getHours();
   const amPm = hours >= 12 ? "PM" : "AM";
@@ -33,15 +29,15 @@ const New = ({ref, element}:{
   const imageUrl = baseUrl + image?.url;
 
   return (
-      <li ref={ref} className="new__container">
-        <a href={element.web_url} className="new">
-          <img className="new__image" src={imageUrl} width={99} height={74}/>
-          <h2 className="new__title">{element.source}</h2>
-          <p className="new__abstract">{element.abstract}</p>
-          <p className="new__date">{outputDate}</p>
-        </a>
+    <li ref={ref} className="new__container">
+      <a href={element.web_url} className="new">
+        <img className="new__image" src={imageUrl} width={99} height={74}/>
+        <h2 className="new__title">{element.source}</h2>
+        <p className="new__abstract">{element.abstract}</p>
+        <p className="new__date">{outputDate}</p>
+      </a>
     </li>
-  )
-};
+  );
+});
 
 export default New;

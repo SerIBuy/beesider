@@ -1,5 +1,5 @@
 import New from "./New";
-import { useRef, useCallback,useEffect, ReactNode} from "react";
+import { useRef, useCallback,useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { addDate } from "../../newsSlice";
 import { useSelector } from "react-redux";
@@ -16,6 +16,7 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}:{
 
   const observer = useRef<IntersectionObserver | null>(null);
   const dispatch = useDispatch();
+  const processedNodesRef = useRef(new Set<HTMLLIElement>);
   let blockDate;
 
   if (date) {
@@ -30,14 +31,17 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}:{
     loadedDatesRef.current = loadedDates;
   }, [loadedDates]);
 
-  const lastDateRef = useCallback((node: ReactNode) => {
+  const lastDateRef = useCallback((node: HTMLLIElement) => {
     if (isFetching || !data) return;
     if (observer.current) {
       observer.current.disconnect();
     }
-
     observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
+      const target = entries[0];
+
+        if (target.isIntersecting && !processedNodesRef.current.has(node)) {
+          processedNodesRef.current.add(node);
+
             const currentLoadedDate = loadedDatesRef.current;
             const dates = Object.keys(data || {});
             const nextDate = dates[currentLoadedDate.length];
@@ -49,9 +53,8 @@ const BlockNews = ({date, newsList, isFetching, data, onNextFetch}:{
             } 
         }
     });
-    if (node instanceof Element) observer.current.observe(node);
-
-}, [isFetching, dispatch]);
+    if (node) observer.current.observe(node);
+  }, [isFetching, dispatch]);
 
   return (
     <section className="block-news__section">

@@ -1,22 +1,23 @@
-import { createSelector } from "@reduxjs/toolkit";
+import { createSelector} from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
-import { ITransformedNew } from "../types/news";
 import { INew } from "../types/news";
 
-const selectMonthlyNews = (state: RootState) => {
-  return  state.newsApi.queries.fetchMonthlyNews?.data || {};
+const emptyObject = {};
+const selectMonthlyNews = (state: any) => {
+  return  state.newsApi.queries.fetchMonthlyNews?.data || emptyObject;
 }
 
+const selectVisibleDates = (state: RootState) => state.news.visibleDates;
+
 export const selectVisibleNews = createSelector(
-  [selectMonthlyNews, (state: RootState) => {
-    return state.news.visibleDates;
-  }],
+  [selectMonthlyNews, selectVisibleDates],
   (monthlyNews: {[key: string]: INew[]}, visibleDates) => {
-    return visibleDates.reduce((acc: ITransformedNew, date: string) => {
-      if (monthlyNews[date]) {
-        acc[date] = monthlyNews[date];
-      }
-      return acc;
-    }, {});
-  }
+    return visibleDates.length > 0
+    ? Object.fromEntries(
+      visibleDates
+      .filter((date) => monthlyNews[date])
+      .map((date) => [date, monthlyNews[date]])
+    )
+    : emptyObject;
+  },
     );
