@@ -5,9 +5,7 @@ import Footer from './components/Footer/Footer'
 import { useEffect, useState} from 'react'
 import { addDate } from './newsSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from './store/store'
 import { INew } from './types/news'
-import { createSelector } from '@reduxjs/toolkit'
 import { useFetchMonthlyNewsQuery } from './store/api'
 import { selectVisibleNews } from './selectors/newsSelectors'
 import BlockNews from './components/Main/BlockNews'
@@ -21,7 +19,7 @@ function App() {
   const [month, setMonth] = useState(1);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const dispatch = useDispatch();
-  const {data, error, isLoading, isError, isFetching, refetch} = useFetchMonthlyNewsQuery({
+  const {data, error, isError, isFetching, refetch} = useFetchMonthlyNewsQuery({
     year,
     month,
   }, {
