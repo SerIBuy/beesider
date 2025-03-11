@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import newsReducer from "../newsSlice";
+import newsReducer from "../components/Main/newsSlice";
 import { newsApi } from "./api";
 
 

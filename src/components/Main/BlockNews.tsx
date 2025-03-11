@@ -1,7 +1,7 @@
 import New from "./New";
 import { useRef, useCallback,useEffect} from "react";
 import { useDispatch } from "react-redux";
-import { addDate } from "../../newsSlice";
+import { addDate } from "./newsSlice";
 import { useSelector } from "react-redux";
 import { INew } from "../../types/news";
 import { RootState } from "../../store/store";
