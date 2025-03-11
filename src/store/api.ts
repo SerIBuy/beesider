@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { makeNewsBlocks } from "../components/utils/newsFunctions";
+import { INew } from "../types/news";
 
 export const newsApi = createApi({
     reducerPath: 'newsApi',
@@ -11,7 +12,7 @@ export const newsApi = createApi({
                 return {...currentCache, ...newItems};
             },
             serializeQueryArgs: ({endpointName}) => endpointName,
-            transformResponse: (response) => makeNewsBlocks(response),
+            transformResponse: (response: INew[]) => makeNewsBlocks(response),
         }),
     }),
 });
