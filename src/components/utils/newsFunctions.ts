@@ -1,10 +1,12 @@
-export const makeNewsBlocks = (news) => {
+import { INew } from "../../types/news";
+
+export const makeNewsBlocks = (news: INew[]) => {
 
     if(!news) {
       console.log('There is no news');
       return;
     }
-    const result = {};
+    const result: {[key: string]: INew[]} = {};
   
     for (let item of news) {
       const currentDate = item.pub_date.split('T')[0];
