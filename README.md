@@ -5,13 +5,19 @@ Install dependensies:
 npm install 
 ```
 
-Run backend:
+Run app:
+
+```
+npm run start:all
+```
+
+Or run backend:
 
 ```
 npx ts-node src/server.js
 ```
 
-Run frontend:
+And then run frontend:
 
 ```
 npm run dev
